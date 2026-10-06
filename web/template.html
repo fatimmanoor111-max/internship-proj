@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>TransitIQ - Transport Analytics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f8fafc;--card:#fff;--side:#fff;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0;--ac:#1d4ed8;--acs:#eff6ff;--ok:#16a34a;--wn:#d97706;--bad:#dc2626;--gr:#cbd5e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1220;--card:#111a2e;--side:#0e1626;--tx:#e2e8f0;--mut:#94a3b8;--bd:#1e293b;--ac:#60a5fa;--acs:#16233d;--gr:#334155}}
+:root[data-theme="dark"]{--bg:#0b1220;--card:#111a2e;--side:#0e1626;--tx:#e2e8f0;--mut:#94a3b8;--bd:#1e293b;--ac:#60a5fa;--acs:#16233d;--gr:#334155}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px}
+.app{display:flex;min-height:100vh}
+aside{width:224px;background:var(--side);border-right:1px solid var(--bd);padding:22px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem;margin:0 8px 4px}.logo i{font-style:normal;background:var(--tx);color:var(--bg);border-radius:7px;width:28px;height:28px;display:grid;place-items:center;font-size:.85rem}
+aside small{color:var(--mut);margin:0 8px 26px;font-size:.72rem}
+nav button{all:unset;cursor:pointer;display:block;width:100%;padding:9px 12px;border-radius:8px;margin-bottom:2px;font-size:.9rem;color:var(--mut);border-left:2px solid transparent}
+nav button:hover{color:var(--tx);background:var(--bg)}nav button.on{background:var(--acs);color:var(--ac);font-weight:600;border-left-color:var(--ac)}
+.sf{margin-top:auto;font-size:.72rem;color:var(--mut);padding:0 8px}.sf button{all:unset;cursor:pointer;border:1px solid var(--bd);padding:7px 11px;border-radius:8px;margin-bottom:12px;display:block;color:var(--tx)}
+.main{flex:1;min-width:0;padding:26px 32px;max-width:1280px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:18px}.top h2{margin:0;font-size:1.4rem;font-weight:700}
+select,input[type=range]{padding:8px 11px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:.85rem;max-width:100%}
+.fl{display:flex;gap:8px;flex-wrap:wrap}.sum{color:var(--mut);margin:0 0 20px;max-width:760px;line-height:1.55}
+.k{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kc{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px 16px}
+.kc span{display:block;font-size:.7rem;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px;white-space:nowrap}.kc b{font-size:1.4rem;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}.c{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px}
+.c h3{margin:0 0 14px;font-size:.85rem;font-weight:600}.wide{grid-column:1/-1}canvas{max-height:280px}
+.pg{display:none}.pg.on{display:block;animation:in .25s}@keyframes in{from{opacity:0}to{opacity:1}}
+table{width:100%;border-collapse:collapse;font-size:.86rem}th{color:var(--mut);font-weight:600;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;padding:8px}td{padding:12px 8px;border-top:1px solid var(--bd)}
+.w{overflow-x:auto}.bg{height:4px;background:var(--bd);border-radius:9px;min-width:90px;margin-bottom:5px}.bg i{display:block;height:100%;border-radius:9px;background:var(--ac)}
+.tag{padding:2px 9px;border-radius:5px;font-size:.72rem;font-weight:600;background:var(--bg);color:var(--mut);border:1px solid var(--bd)}.tag.h{background:var(--acs);color:var(--ac);border-color:transparent}
+.ml{display:grid;grid-template-columns:minmax(260px,320px) 1fr;gap:12px}@media(max-width:820px){.ml{grid-template-columns:1fr}}
+label{display:block;font-size:.75rem;color:var(--mut);margin:14px 0 5px;font-weight:600}label select,label input{width:100%}
+.gau{text-align:center}.gau svg{width:220px;max-width:100%}.big{font-size:2.1rem;font-weight:700}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px;text-align:left}.mini div{border:1px solid var(--bd);border-radius:8px;padding:12px 14px}.mini b{font-size:1.15rem;display:block}.mini span{font-size:.7rem;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.mc{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:12px}.mc .c b{font-size:1.2rem;display:block;margin:6px 0 2px}.mc small{color:var(--mut);display:block;font-size:.78rem}
+@media(max-width:760px){aside{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:9;border-right:0;border-top:1px solid var(--bd)}.logo,aside small,.sf{display:none}nav{display:flex;width:100%;gap:2px}nav button{font-size:.68rem;text-align:center;padding:9px 2px;margin:0;border-left:0}.main{padding:18px 14px 84px}}
+</style></head><body><div class="app">
+<aside><div class="logo"><i>T</i>TransitIQ</div><small>Transport Analytics &amp; ML</small>
+<nav><button class="on" data-p="dash">Dashboard</button><button data-p="routes">Routes</button><button data-p="ml">AI Predictor</button><button data-p="ins">Model Insights</button></nav>
+<div class="sf"><button id="th">Light / dark mode</button>Simulated data · 90 days<br>10 routes · 40 buses</div></aside>
+<div class="main"><div class="top"><h2 id="ttl">Dashboard</h2><div class="fl" id="flt"><select id="r"></select><select id="w"></select></div></div>
+<section class="pg on" id="dash"><p class="sum" id="hp"></p><div class="k" id="k"></div>
+<div class="g"><div class="c wide"><h3>Daily passengers</h3><canvas id="c1"></canvas></div><div class="c"><h3>Passengers by hour</h3><canvas id="c2"></canvas></div>
+<div class="c"><h3>Revenue by route (PKR)</h3><canvas id="c3"></canvas></div><div class="c"><h3>Avg delay by weather (min)</h3><canvas id="c4"></canvas></div><div class="c"><h3>Trip status</h3><canvas id="c5"></canvas></div></div></section>
+<section class="pg" id="routes"><div class="c w"><h3>Route performance &amp; AI segments</h3><table id="rt"></table></div></section>
+<section class="pg" id="ml"><div class="ml"><div class="c"><h3>Plan a trip</h3>
+<label>Route<select id="pr"></select></label><label>Departure hour: <b id="hv"></b><input id="ph" type="range" min="5" max="21" value="9"></label>
+<label>Day<select id="pd"></select></label><label>Weather<select id="pw"></select></label></div>
+<div class="c gau"><h3>Predicted delay risk (≥ 15 min)</h3><svg viewBox="0 0 200 120"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--bd)" stroke-width="16" stroke-linecap="round"/><path id="ga" d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--ok)" stroke-width="16" stroke-linecap="round" stroke-dasharray="0 251" style="transition:.6s"/></svg>
+<div class="big" id="gp"></div><span id="gl" class="tag"></span><div class="mini" id="mn"></div>
+<p style="font-size:.75rem;color:var(--mut)">Output of the trained scikit-learn models (50-seat bus, 5 years old). Backend: FastAPI <code>/predict/trip</code>.</p></div></div></section>
+<section class="pg" id="ins"><div class="mc" id="mc"></div><div class="c"><h3>14-day passenger forecast (GradientBoosting)</h3><canvas id="c6"></canvas></div></section>
+</div></div>
+<script>
+const D=__DATA__;const $=i=>document.getElementById(i);const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();let ch={};
+const fmt=n=>Math.round(n).toLocaleString("en-US"),DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const opt=(a,all)=>(all?`<option value="-1">${all}</option>`:"")+a.map((n,i)=>`<option value="${i}">${n}</option>`).join("");
+$("r").innerHTML=opt(D.routes,"All routes");$("w").innerHTML=opt(D.weather,"All weather");$("pr").innerHTML=opt(D.routes);$("pw").innerHTML=opt(D.weather);$("pd").innerHTML=opt(DAYS);
+function draw(id,type,labels,data,col,horiz,fill){if(ch[id])ch[id].destroy();if(horiz)$(id).parentNode.style.height="320px";const c=$(id).getContext("2d");let bg=col;
+ if(fill){bg=c.createLinearGradient(0,0,0,260);bg.addColorStop(0,col+"88");bg.addColorStop(1,col+"05")}
+ ch[id]=new Chart(c,{type,data:{labels,datasets:[{data,backgroundColor:type=="doughnut"?col:bg,borderColor:type=="line"?col:"transparent",fill:!!fill,tension:.35,pointRadius:0,borderRadius:3,borderWidth:type=="line"?2.5:0}]},
+ options:{maintainAspectRatio:!horiz,indexAxis:horiz?"y":"x",plugins:{legend:{display:type=="doughnut",position:"bottom",labels:{color:css("--mut")}}},animation:{duration:600},scales:type=="doughnut"?{}:{x:{ticks:{color:css("--mut"),maxTicksLimit:9},grid:{display:false}},y:{ticks:{color:css("--mut"),autoSkip:false,font:{size:10}},grid:{color:css("--bd")}}}}})}
+function count(el,v,f){const t0=performance.now();(function s(t){const p=Math.min(1,(t-t0)/700);el.textContent=f(v*p);if(p<1)requestAnimationFrame(s)})(t0)}
+function dash(){const r=+$("r").value,w=+$("w").value,rows=D.t.filter(t=>(r<0||t[0]==r)&&(w<0||t[3]==w)),done=rows.filter(t=>t[7]==1);
+ const pax=rows.reduce((a,t)=>a+t[4],0),rev=rows.reduce((a,t)=>a+t[5],0),dl=done.length?done.reduce((a,t)=>a+t[6],0)/done.length:0,late=done.length?done.filter(t=>t[6]>=15).length/done.length*100:0,cp=rows.length?done.length/rows.length*100:0;
+ $("hp").textContent=`${fmt(pax)} passengers and PKR ${fmt(rev)} revenue across ${fmt(rows.length)} trips. ${late.toFixed(1)}% of completed trips ran 15+ minutes late.`;
+ const K=[["","Passengers",pax,fmt],["","Revenue (PKR)",rev,v=>(v/1e6).toFixed(2)+" M"],["","Trips",rows.length,fmt],["","Completion",cp,v=>v.toFixed(1)+"%"],["","Avg delay",dl,v=>v.toFixed(1)+" min"],["","Delayed 15+ min",late,v=>v.toFixed(1)+"%"]];
+ $("k").innerHTML=K.map(k=>`<div class="kc"><span>${k[1]}</span><b>0</b></div>`).join("");document.querySelectorAll("#k b").forEach((b,i)=>count(b,K[i][2],K[i][3]));
+ const by=(a,i,f)=>{const m={};a.forEach(t=>m[t[i]]=(m[t[i]]||0)+f(t));return m},dm=by(rows,1,t=>t[4]);
+ draw("c1","line",D.dates.map(d=>d.slice(5)),D.dates.map((_,i)=>dm[i]||0),css("--ac"),0,1);
+ const hm=by(rows,2,t=>t[4]),h=Object.keys(hm).sort((a,b)=>a-b);draw("c2","bar",h.map(x=>x+":00"),h.map(x=>hm[x]),css("--ac"));
+ const rr=by(rows,0,t=>t[5]),ro=Object.keys(rr).sort((a,b)=>rr[b]-rr[a]);draw("c3","bar",ro.map(i=>D.routes[i]),ro.map(i=>rr[i]),css("--ac"),1);
+ const s={},n={};done.forEach(t=>{s[t[3]]=(s[t[3]]||0)+t[6];n[t[3]]=(n[t[3]]||0)+1});const wk=Object.keys(s);draw("c4","bar",wk.map(i=>D.weather[i]),wk.map(i=>+(s[i]/n[i]).toFixed(1)),css("--ac"));
+ draw("c5","doughnut",["Completed","Cancelled"],[done.length,rows.length-done.length],[css("--ac"),css("--gr")])}
+function pred(){const r=+$("pr").value,h=+$("ph").value,d=+$("pd").value,w=+$("pw").value,p=D.P[r][h-5][d][w];$("hv").textContent=h+":00";
+ const pr=p[0],c=pr>=60?"var(--bad)":pr>=30?"var(--wn)":"var(--ok)";$("ga").style.stroke=c;$("ga").setAttribute("stroke-dasharray",`${pr*2.51} 251`);
+ $("gp").textContent=pr.toFixed(0)+"%";$("gl").textContent=(pr>=60?"High":pr>=30?"Medium":"Low")+" risk";
+ $("mn").innerHTML=[["Expected delay",p[1]+" min"],["Expected passengers",p[2]],["Expected revenue","PKR "+fmt(p[3])]].map(a=>`<div><b>${a[1]}</b><span>${a[0]}</span></div>`).join("")}
+["pr","ph","pd","pw"].forEach(i=>$(i).oninput=pred);$("r").onchange=$("w").onchange=dash;
+const mx=Math.max(...D.rt.map(r=>r.rev));$("rt").innerHTML="<tr><th>Route</th><th>Passengers</th><th>Revenue</th><th>Avg delay</th><th>Occupancy</th><th>AI segment</th></tr>"+D.rt.map(r=>`<tr><td><b>${r.name}</b></td><td>${fmt(r.pax)}</td><td><div class="bg"><i style="width:${r.rev/mx*100}%"></i></div>PKR ${fmt(r.rev)}</td><td>${r.delay} min</td><td>${r.occ}%</td><td><span class="tag ${r.seg[0]=="H"?"h":""}">${r.seg}</span></td></tr>`).join("");
+$("mc").innerHTML=D.ml.map(m=>`<div class="c"><small>${m[0]}</small><b>${m[2]}</b><small>${m[1]}</small></div>`).join("");
+function ins(){const a=D.fc.h,b=D.fc.p,L=[...a[0],...b[0]];if(ch.c6)ch.c6.destroy();const c=$("c6");ch.c6=new Chart(c,{type:"line",data:{labels:L.map(d=>d.slice(5)),datasets:[{label:"Actual",data:[...a[1],...b[0].map(()=>null)],borderColor:css("--ac"),pointRadius:0,tension:.3},{label:"Forecast",data:[...a[1].map(()=>null),...b[1]],borderColor:css("--mut"),borderDash:[6,4],pointRadius:2,tension:.3}]},options:{plugins:{legend:{labels:{color:css("--mut")}}},scales:{x:{ticks:{color:css("--mut"),maxTicksLimit:9},grid:{display:false}},y:{ticks:{color:css("--mut")},grid:{color:css("--bd")}}}}})}
+const T={dash:"Dashboard",routes:"Routes",ml:"AI Predictor",ins:"Model Insights"};
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button,.pg").forEach(e=>e.classList.remove("on"));b.classList.add("on");$(b.dataset.p).classList.add("on");$("ttl").textContent=T[b.dataset.p];$("flt").style.display=b.dataset.p=="dash"?"flex":"none";if(b.dataset.p=="ins")ins();if(b.dataset.p=="dash")dash()});
+$("th").onclick=()=>{const d=document.documentElement,dk=d.dataset.theme?d.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;d.dataset.theme=dk?"light":"dark";dash();const on=document.querySelector("nav .on").dataset.p;if(on=="ins")ins()};
+$("pr").value=D.routes.findIndex(n=>n.startsWith("Green"));dash();pred();
+</script></body></html>

@@ -1,0 +1,92 @@
+{
+  "delay_classifier": {
+    "best": "GradientBoosting",
+    "comparison": [
+      {
+        "model": "LogisticRegression",
+        "accuracy": 0.7977,
+        "f1": 0.6065,
+        "roc_auc": 0.92,
+        "cv_f1": 0.6157
+      },
+      {
+        "model": "RandomForest",
+        "accuracy": 0.8424,
+        "f1": 0.6269,
+        "roc_auc": 0.9062,
+        "cv_f1": 0.6231
+      },
+      {
+        "model": "GradientBoosting",
+        "accuracy": 0.8934,
+        "f1": 0.6568,
+        "roc_auc": 0.9162,
+        "cv_f1": 0.6496
+      }
+    ]
+  },
+  "delay_regressor": {
+    "best": "Ridge",
+    "comparison": [
+      {
+        "model": "Ridge",
+        "mae": 2.4549,
+        "r2": 0.6689,
+        "cv_r2": 0.6665
+      },
+      {
+        "model": "RandomForest",
+        "mae": 2.6165,
+        "r2": 0.6304,
+        "cv_r2": 0.6261
+      },
+      {
+        "model": "GradientBoosting",
+        "mae": 2.463,
+        "r2": 0.6672,
+        "cv_r2": 0.663
+      }
+    ]
+  },
+  "demand_regressor": {
+    "best": "GradientBoosting",
+    "comparison": [
+      {
+        "model": "Ridge",
+        "mae": 4.5985,
+        "r2": 0.7544,
+        "cv_r2": 0.7502
+      },
+      {
+        "model": "RandomForest",
+        "mae": 2.8857,
+        "r2": 0.8833,
+        "cv_r2": 0.8728
+      },
+      {
+        "model": "GradientBoosting",
+        "mae": 2.8195,
+        "r2": 0.8939,
+        "cv_r2": 0.878
+      }
+    ]
+  },
+  "forecast": {
+    "holdout_days": 14,
+    "mae": 247.7,
+    "seasonal_naive_mae": 249.9,
+    "mape_pct": 12.15
+  },
+  "clustering": {
+    "best_k": 2,
+    "silhouette": {
+      "2": 0.441,
+      "3": 0.336,
+      "4": 0.275
+    }
+  },
+  "anomaly": {
+    "flagged_trips": 88,
+    "contamination": 0.01
+  }
+}

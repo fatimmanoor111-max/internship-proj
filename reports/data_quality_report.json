@@ -1,0 +1,20 @@
+{
+  "rows_raw": 9076,
+  "duplicates_removed": 72,
+  "missing_before": {
+    "weather": 90,
+    "traffic_index": 90,
+    "passengers": 135,
+    "delay_min": 279
+  },
+  "impossible_passengers_fixed": 27,
+  "delay_outliers_fixed": 34,
+  "delay_iqr_capped": 1,
+  "rows_clean": 9004,
+  "validation": {
+    "no_duplicate_trip_ids": true,
+    "passengers_within_capacity": true,
+    "no_nulls_in_core_cols": true,
+    "revenue_non_negative": true
+  }
+}
